@@ -17,5 +17,6 @@ export interface User extends Entity {
     fullName: string;
     password?: string;
     email?: string;
-    phoneNumber: string;
+    phoneNumber?: string;
+    role?: string;
 }

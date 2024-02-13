@@ -12,6 +12,7 @@ import { ProductsComponent } from './pages/admin/products/products.component';
 import { ProfileComponent } from './pages/main/profile/profile.component';
 import { StoreComponent } from './pages/main/store/store.component';
 import { AboutComponent } from './pages/main/about/about.component';
+import { AppointmentsComponent } from './pages/admin/appointments/appointments.component';
 
 export const routes: Routes = [
   {
@@ -26,13 +27,14 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'admin',
+    path: '',
     canActivate: [authGuard],
     component: AdminComponent,
     children: [
-      { path: 'dashboard', component: DashboardComponent },
+      { path: 'admin', component: DashboardComponent },
       { path: 'users', component: UsersComponent },
-      { path: 'products', component: ProductsComponent }
+      { path: 'products', component: ProductsComponent },
+      { path: 'appointments', component: AppointmentsComponent }
     ]
   },
   { path: 'login', component: LoginComponent },

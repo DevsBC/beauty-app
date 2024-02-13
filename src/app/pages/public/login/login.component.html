@@ -11,14 +11,18 @@
                     <span class="card-title">Acceso a usuarios</span>
                     <form>
                         <div class="input-field">
-                            <input id="username" type="text" class="validate">
+                            <input id="username" type="text" class="validate" name="username" [(ngModel)]="user.username">
                             <label for="username">Nombre de usuario</label>
                         </div>
                         <div class="input-field">
-                            <input id="password" type="password" class="validate">
+                            <input id="password" type="password" name="password" class="validate"  [(ngModel)]="user.password" (keyup.enter)="login()">
                             <label for="password">Contraseña</label>
                         </div>
-                        <button class="btn waves-effect waves-light" type="button">Entrar</button>
+                        <button class="btn waves-effect waves-light" type="button" (click)="login()">Entrar</button>
+                        @if (error) {
+                            <blockquote>{{ error }}</blockquote>
+                        }
+
                     </form>
                 </div>
                 <div class="card-action">

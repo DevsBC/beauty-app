@@ -1,2 +1,16 @@
-<p>admin works!</p>
+<div class="navbar-fixed">
+    <nav>
+    <a class="brand-logo">Usuario: {{ user.username }}</a>
+    <a class="brand-logo center">Admin Beauty App</a>
+    <div class="nav-wrapper">
+        <ul class="right hide-on-med-and-down">
+            <li routerLinkActive="active"><a routerLink="/admin" >Inicio</a></li>
+            <li routerLinkActive="active"><a routerLink="/users">Usuarios</a></li>
+            <li routerLinkActive="active"><a routerLink="/products">Productos</a></li>
+            <li routerLinkActive="active"><a routerLink="/appointments">Citas</a></li>
+            <li><a ><i class="material-icons" (click)="logout()">logout</i></a></li>
+        </ul>
+      </div>
+    </nav>
+</div>
 <router-outlet></router-outlet>
