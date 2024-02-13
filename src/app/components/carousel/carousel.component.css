@@ -1,0 +1,7 @@
+.carousel-content {
+    position: absolute;
+    right: 0;
+    bottom: 100px;
+    color: white;
+    width: 50%;
+}

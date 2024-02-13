@@ -1,0 +1,15 @@
+<div class="col s3">
+    <div class="card">
+        <div class="card-image">
+            <img [src]="product.image" alt="Product Image">
+            <span class="card-title">{{ product.name }}</span>
+        </div>
+        <div class="card-content">
+            <p>{{ product.description }}</p>
+        </div>
+        <div class="card-action">
+            <p class="price">$ {{ product.price }} MXN</p>
+            <a class="btn waves-effect waves-light">Agregar al carrito</a>
+        </div>
+    </div>
+</div>

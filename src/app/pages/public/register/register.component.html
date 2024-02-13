@@ -1,1 +1,51 @@
-<p>register works!</p>
+<div class="navbar-fixed">
+    <nav>
+        <a routerLink="/" class="brand-logo center">Beauty App</a>
+    </nav>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 offset-m3">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Registro</span>
+                    <form>
+                        <div class="input-field">
+                        <input id="username" type="text" class="validate" minlength="6" required>
+                        <label for="username">Nombre de Usuario</label>
+                    
+                        </div>
+                        <div class="input-field">
+                        <input id="password" type="password" class="validate" minlength="6" required>
+                        <label for="password">Contraseña (mín. 6 caracteres)
+                        
+                        </label>
+                        <p class="right">
+                            <label>
+                            <input type="checkbox" (click)="togglePasswordVisibility()">
+                            <span>Mostrar Contraseña</span>
+                            </label>
+                        </p>
+                        </div>
+                        <div class="input-field">
+                        <input id="fullname" type="text" class="validate" required>
+                        <label for="fullname">Nombre Completo</label>
+                        </div>
+                        <div class="input-field">
+                        <input id="email" type="email" class="validate">
+                        <label for="email">Correo Electrónico (opcional)</label>
+                        </div>
+                        <div class="input-field">
+                        <input id="phoneNumber" type="tel" class="validate">
+                        <label for="phoneNumber">Número de Teléfono (opcional)</label>
+                        </div>
+                        <button class="btn waves-effect waves-light" type="submit">Registrarse</button>
+                    </form>
+                </div>
+                <div class="card-action">
+                    <p>¿Ya tienes una cuenta? <a routerLink="/login">Iniciar Sesión</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

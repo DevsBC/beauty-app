@@ -8,9 +8,10 @@ import { UsersComponent } from './pages/admin/users/users.component';
 import { LoginComponent } from './pages/public/login/login.component';
 import { RegisterComponent } from './pages/public/register/register.component';
 import { authGuard } from './guards/auth.guard';
-import { ProductsComponent } from './pages/main/products/products.component';
-import { ServicesComponent } from './pages/main/services/services.component';
+import { ProductsComponent } from './pages/admin/products/products.component';
 import { ProfileComponent } from './pages/main/profile/profile.component';
+import { StoreComponent } from './pages/main/store/store.component';
+import { AboutComponent } from './pages/main/about/about.component';
 
 export const routes: Routes = [
   {
@@ -18,8 +19,8 @@ export const routes: Routes = [
     component: MainComponent,
     children: [
       { path: '', component: HomeComponent },
-      { path: 'products', component: ProductsComponent },
-      { path: 'services', component: ServicesComponent },
+      { path: 'store', component: StoreComponent },
+      { path: 'about', component: AboutComponent },
       { path: 'profile', component: ProfileComponent },
       { path: 'cart', component: CartComponent },
     ]
@@ -31,6 +32,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'users', component: UsersComponent },
+      { path: 'products', component: ProductsComponent }
     ]
   },
   { path: 'login', component: LoginComponent },
