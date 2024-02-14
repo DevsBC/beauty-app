@@ -4,11 +4,12 @@ import { AsyncPipe } from '@angular/common';
 import { User } from '../../../schema.database';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { RoleNamePipe } from '../../../pipes/role-name.pipe';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [AsyncPipe, FormsModule],
+  imports: [AsyncPipe, FormsModule, RoleNamePipe],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
@@ -16,8 +17,9 @@ export class UsersComponent implements OnInit, OnDestroy {
   users: User[] = [];
   copy: User[] = [];
   sub: Subscription;
-  user = {} as User;
+  user = { role: 'employee' } as User;
   password = '';
+  hasChanged = false;
   constructor(public userService: UserService) {
     this.sub = this.userService.getUsers().subscribe(data => {
       this.users = data;
@@ -27,7 +29,7 @@ export class UsersComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     (window as any).M.Modal.init(document.querySelector('.modal'), 
-    { onCloseEnd: () => this.user = {} as User, onStartEnd: () => this.user.role = this.user.role || 'editor' });
+    { onCloseEnd: () => this.user = { role: 'employee' } as User });
     (window as any).M.FormSelect.init(document.querySelector('select'));
   }
 
@@ -55,12 +57,17 @@ export class UsersComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    console.log(this.user);
+    if (!this.hasChanged) {
+      console.log('nothing has changed');
+      return;
+    }
+
+    const role = (document.querySelector('[name="group1"]:checked')as any).value;
+    this.user.role = role;
+
     if (this.user.id) {
       if (this.password === btoa(this.user.password!)) {
         this.user.password = atob(this.user.password!);
-      } else {
-        console.log('no changed');
       }
       this.userService.setUser(this.user, false, true);
     } else {
@@ -69,13 +76,20 @@ export class UsersComponent implements OnInit, OnDestroy {
       }
     }
     
-    this.user = {} as User;
+    this.user = { role: 'employee' } as User;
     this.password = '';
+    this.hasChanged = false;
   }
 
   edit(user: User) {
     this.password = user.password!;
     this.user = {...user};
+  }
+
+  remove() {
+    if (this.user.id) {
+      this.userService.deleteUser(this.user);
+    }
   }
 
   ngOnDestroy() {

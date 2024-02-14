@@ -15,8 +15,8 @@ export interface Product extends Entity {
 export interface User extends Entity {
     username: string;
     fullName: string;
+    role: string;
     password?: string;
     email?: string;
     phoneNumber?: string;
-    role?: string;
 }
