@@ -24,6 +24,7 @@ export class RegisterComponent {
 
   async register() {
     if (this.user.username && this.user.password) {
+      this.user.role = 'customer';
       try {
         await this.auth.createAccount(this.user);
         this.router.navigateByUrl('/profile');

@@ -4,6 +4,7 @@ import { Firestore, deleteDoc, doc, getDoc, getDocs, getFirestore, limit, limitT
 import { collection } from "firebase/firestore"; 
 import {  v4 as uuidv4 } from 'uuid';
 import { environment } from '../../environments/environment.development';
+import { Observable } from 'rxjs';
 interface IQuery {
   property: string;
   condition:
@@ -110,6 +111,23 @@ export class DatabaseService {
       data.push(doc.data());
     });
     return data;
+  }
+
+  public getSnapshot(collectionName: string) {
+    const path = this.getPath(collectionName);
+    console.log(path);
+    return new Observable(observer => {
+      return onSnapshot(collection(this.db, path),
+        (snapshot => {
+          const data: any[] = [];
+          
+          snapshot.docs.forEach(d => data.push(d.data()));
+          console.log(data);
+          observer.next(data);
+        }),
+        (error => observer.error(error.message))
+      );
+    });
   }
 
 
