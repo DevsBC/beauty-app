@@ -1,1 +1,81 @@
-<p>products works!</p>
+<h2>Productos de la tienda</h2>
+
+<div class="row">
+    <div class="input-field col s10">
+        <input id="search" type="text" class="validate" (keyup)="filter($event)">
+        <label for="search">Buscar</label>
+    </div>
+    <div class="col s2">
+        <a class="waves-effect waves-light btn-large modal-trigger" href="#modal-product">Nuevo producto</a>
+    </div>
+</div>
+
+<table class="striped highlight">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Imagen</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+        </tr>            
+    </thead>
+    <tbody>
+        @if (products.length > 0) {
+            @for (product of products; track product.id) {
+                <tr [class]="product.stock === 0 ? 'red lighten-2' : ''">
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td><img class="responsive-img" width="80" [src]="'assets/images/products/' + product.image"></td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.stock }}</td>
+                    <td><a class="waves-effect waves-teal btn modal-trigger" (click)="edit(product)" href="#modal-product">Editar</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div id="modal-product" class="modal">
+    <div class="modal-content">
+        <h4>{{ product.id ? 'Editar Producto' : 'Nuevo Producto' }}</h4>
+        <form (input)="hasChanged = true">
+            
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" name="name" type="text" [(ngModel)]="product.name">
+                    <label for="name">Nombre</label>
+                </div>
+                
+                <div class="input-field col s12">
+                    <textarea id="description" name="description" class="materialize-textarea"  [(ngModel)]="product.description"></textarea>
+                    <label for="description">Descripción</label>
+                </div>
+
+                <div class="input-field col s12">
+                    <input id="image" name="image" type="text" [(ngModel)]="product.image">
+                    <label for="name">Ruta de la imagen</label>
+                    <span class="helper-text">/assets/images/products</span>
+                </div>
+          
+                <div class="input-field col s12">
+                    <input id="price" name="price" type="number" [(ngModel)]="product.price">
+                    <label for="price">Precio</label>
+                </div>
+    
+                <div class="input-field col s12">
+                    <input id="stock" name="stock" type="number" [(ngModel)]="product.stock">
+                    <label for="stock">Cantidad</label>
+                </div>
+            </div>  
+        </form>
+    </div>
+    <div class="modal-footer">
+        @if (product.id) {
+            <a class="modal-close waves-effect red btn left" (click)="remove()">Eliminar</a>
+        }
+        <a class="modal-close waves-effect btn-flat">Cancelar</a>
+        <a class="modal-close waves-effect waves-green btn" (click)="save()">Guardar</a>
+    </div>
+</div>

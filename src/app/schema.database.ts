@@ -10,6 +10,17 @@ export interface Product extends Entity {
     image: string;
     description: string;
     price: number;
+    stock: number;
+}
+
+export interface CartItem extends Product {
+    quantity: number;
+}
+
+export interface Cart extends Entity {
+    items: CartItem[];
+    total: number;
+    count: number;
 }
 
 export interface User extends Entity {
