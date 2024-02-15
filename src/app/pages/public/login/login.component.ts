@@ -23,9 +23,9 @@ export class LoginComponent {
       try {
         const user = await this.auth.enterAccount(this.user);
         if (user.role) {
-          this.router.navigateByUrl('/admin');
+          window.location.href = '/admin';
         } else {
-          this.router.navigateByUrl('/profile');
+          window.location.href = '/profile';
         }
       } catch (error: any) {
         this.error = error.message;

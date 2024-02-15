@@ -28,3 +28,13 @@ export interface User extends Entity {
     email?: string;
     phoneNumber?: string;
 }
+
+export interface Appointment extends Entity {
+    name: string;
+    date: string;
+    services: string[];
+    status: 'Confirmada' | 'Cancelada';
+    createdBy: string | null;
+    notes?: string;
+    attendedBy?: string;
+}

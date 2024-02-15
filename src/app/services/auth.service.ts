@@ -47,7 +47,7 @@ export class AuthService {
 
   getUser() {
     const user = (localStorage.getItem('token') || localStorage.getItem('user'))!;
-    return JSON.parse(user);
+    return user ? JSON.parse(user) : null;
   }
 
   private async getUsers(name: string) {

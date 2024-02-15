@@ -1,8 +1,5 @@
 <div class="modal-content">
     <h4>Agendar cita</h4>
     <p>La disponibilidad puede tener cambios sin previo aviso</p>
-</div>
-
-<div class="modal-footer">
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat disabled">Agendar</a>
+    <app-schedule-appointment (onSubmit)="submitted($event)"></app-schedule-appointment>
 </div>

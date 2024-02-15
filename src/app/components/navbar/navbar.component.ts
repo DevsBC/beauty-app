@@ -12,9 +12,10 @@ import { BookingFormComponent } from '../booking-form/booking-form.component';
 })
 export class NavbarComponent implements OnInit {
   classColor = '';
+  modalAppointment: any
   constructor(private router: Router) {}
   ngOnInit(): void {
-    (window as any).M.Modal.init(document.querySelectorAll('.modal'), {});
+    this.modalAppointment = (window as any).M.Modal.init(document.querySelector('.modal'), {});
     document.addEventListener('scroll', () => {
       const scrollPosition = window.scrollY;
       if (scrollPosition > 80) {
@@ -33,5 +34,12 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  open() {
+    this.modalAppointment.open();
+  }
+
+  close() {
+    this.modalAppointment.close();
+  }
 
 }
