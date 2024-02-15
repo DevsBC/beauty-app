@@ -10,15 +10,12 @@ export interface Product extends Entity {
     image: string;
     description: string;
     price: number;
-    stock: number;
-}
-
-export interface CartItem extends Product {
-    quantity: number;
+    quantity?: number;
+    stock?: number;
 }
 
 export interface Cart extends Entity {
-    items: CartItem[];
+    items: Product[];
     total: number;
     count: number;
 }
