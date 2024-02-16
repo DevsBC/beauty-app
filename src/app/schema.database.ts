@@ -33,7 +33,7 @@ export interface Appointment extends Entity {
     name: string;
     date: string;
     services: string[];
-    status: 'Confirmada' | 'Cancelada';
+    status: 'Confirmada' | 'Cancelada' | 'Completada' | string;
     createdBy: string | null;
     notes?: string;
     attendedBy?: string;

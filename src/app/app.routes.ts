@@ -13,6 +13,7 @@ import { ProfileComponent } from './pages/main/profile/profile.component';
 import { StoreComponent } from './pages/main/store/store.component';
 import { AboutComponent } from './pages/main/about/about.component';
 import { AppointmentsComponent } from './pages/admin/appointments/appointments.component';
+import { OrdersComponent } from './pages/admin/orders/orders.component';
 
 export const routes: Routes = [
   {
@@ -34,7 +35,8 @@ export const routes: Routes = [
       { path: 'admin', component: DashboardComponent },
       { path: 'users', component: UsersComponent },
       { path: 'products', component: ProductsComponent },
-      { path: 'appointments', component: AppointmentsComponent }
+      { path: 'appointments', component: AppointmentsComponent },
+      { path: 'orders', component: OrdersComponent }
     ]
   },
   { path: 'login', component: LoginComponent },

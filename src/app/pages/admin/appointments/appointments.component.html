@@ -1,2 +1,33 @@
 <h2>Citas</h2>
 <app-schedule-appointment></app-schedule-appointment>
+<table class="striped highlight">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Fecha</th>
+            <th>Servicios</th>
+            <th>Notas</th>
+            <th>Estado</th>
+            <th>Atendido por</th>
+            <th>Acciones</th>
+        </tr>            
+    </thead>
+    <tbody>
+        @if (appointments.length > 0) {
+            @for (appointment of appointments; track appointment.id) {
+                <tr>
+                    <td>{{ appointment.name }}</td>
+                    <td>{{ appointment.date | date: 'cccc dd/LLLL/yyyy h:mm a' }}</td>
+                    <td>{{ appointment.services }}</td>
+                    <td>{{ appointment.notes }}</td>
+                    <td>{{ appointment.status }}</td>
+                    <td>{{ appointment.attendedBy }}</td>
+                    <td>
+                        <button class="waves-effect waves-light btn" (click)="updateStatus(appointment, 'Completada')" [disabled]="appointment.status === 'Completada'">Completar</button>
+                        <button class="waves-effect waves-light btn amber darken-2" (click)="updateStatus(appointment, 'Cancelada')" [disabled]="appointment.status === 'Cancelada' || appointment.status === 'Completada'">Cancelar</button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

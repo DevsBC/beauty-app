@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Appointment, User } from '../../schema.database';
 import { AuthService } from '../../services/auth.service';
+import { AppointmentService } from '../../services/appointment.service';
 
 @Component({
   selector: 'app-schedule-appointment',
@@ -16,7 +17,7 @@ export class ScheduleAppointmentComponent {
   @Output() onSubmit = new EventEmitter();
   appointment = {} as Appointment;
   user: User;
-  constructor(private auth: AuthService) { this.user = this.auth.getUser() }
+  constructor(private auth: AuthService, private appointmentService: AppointmentService) { this.user = this.auth.getUser() }
 
   init() {
     (window as any).M.FormSelect.init(document.querySelector('select'));
@@ -39,8 +40,8 @@ export class ScheduleAppointmentComponent {
 
   async submit() {
     if (this.appointment.date && this.appointment.name) {
-      console.log('simon');
-      this.onSubmit.emit({ ...this.appointment });
+      const appointment = await this.appointmentService.setAppointment(this.appointment);
+      this.onSubmit.emit(appointment);
       this.appointment = {} as Appointment;
 
     }
