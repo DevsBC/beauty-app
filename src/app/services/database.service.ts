@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from "firebase/app";
-import { Firestore, deleteDoc, doc, getDoc, getDocs, getFirestore, limit, limitToLast, onSnapshot, orderBy, query, setDoc, where } from "firebase/firestore";
+import { Firestore, deleteDoc, doc, getDoc, getDocs, getFirestore, limit, limitToLast, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { collection } from "firebase/firestore"; 
 import {  v4 as uuidv4 } from 'uuid';
 import { environment } from '../../environments/environment.development';
@@ -60,6 +60,11 @@ export class DatabaseService {
 
     this.set(collectionName, data);    
     return data;
+  }
+
+  public async updateDocument(collectionName: string, id: string, data: any) {
+    collectionName = this.getPath(collectionName);
+    await updateDoc(doc(this.db, collectionName, id), { ...data });
   }
 
   public async getDocument(collectionName: string, id: string) {

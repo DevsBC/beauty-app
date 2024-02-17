@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';

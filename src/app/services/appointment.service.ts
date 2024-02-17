@@ -50,6 +50,15 @@ export class AppointmentService {
     return appointment;
   }
 
+  async updateAppointment(id: string, createdBy: string) {
+    await this.db.updateDocument(this.collectionName, id, { createdBy });
+  }
+
+  async getAppointmentsByUsername(username: string) {
+    const appointments: Appointment[] = await this.db.getCollection(this.collectionName, { property: 'createdBy', condition: '==', value: username });
+    return appointments;
+  }
+
   deleteappointment(appointment: Appointment) {
     return this.db.deleteDocument(this.collectionName, appointment);
   }

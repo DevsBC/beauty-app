@@ -43,6 +43,8 @@ export class NavbarComponent implements OnInit {
     let footer = '<a href="/register">Crear mi cuenta</a>';
     if (data.createdBy) {
       footer = '<a href="/profile">Ir a mi cuenta</a>';
+    } else {
+      sessionStorage.setItem('cita', JSON.stringify(data));
     }
     this.modalAppointment.close();
     this.showAlert({ title: 'Tu cita ha sido confirmada', footer });

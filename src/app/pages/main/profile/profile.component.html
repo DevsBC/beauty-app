@@ -1,2 +1,80 @@
-<p>profile works!</p>
-<button class="btn waves-effect waves-light" type="submit" (click)="logout()">Cerrar sesion</button>
+<h2>Mi cuenta: {{ user.username }}</h2>
+<div class="row">
+    <!-- SideNav -->
+    <div class="col s3">
+    <div class="card">
+        <div class="card-content">
+        <ul class="collection">
+            <li class="collection-item"> 
+                <i class="material-icons left">badge</i> 
+                <a class="waves-effect" (click)="showContent('datos')">Datos</a>
+            </li>
+            <li class="collection-item">
+                <i class="material-icons left">shopping_bag</i>
+                <a class="waves-effect" (click)="showContent('compras')">Compras</a>
+            </li>
+            <li class="collection-item">
+                <i class="material-icons left">event_available</i>
+                <a class="waves-effect" (click)="showContent('citas')">Citas</a>
+            </li>
+            <li class="collection-item">
+                <i class="material-icons left">logout</i>
+                <a class="waves-effect" style="color: red;" (click)="logout()">Cerrar sesion</a>
+            </li>
+
+        </ul>
+        </div>
+    </div>
+    </div>
+  
+    <!-- Content -->
+    <div class="col s9">
+        <div id="datosContent" class="container">
+            <form class="row" (input)="hasChanged = true">
+                <div class="input-field">
+                    <input id="fullname" name="fullName" type="text" class="validate" required [(ngModel)]="user.fullName">
+                    <label for="fullname">Nombre Completo</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="profile-email" name="email" type="email" class="validate" [(ngModel)]="user.email">
+                    <label for="email">Correo Electrónico</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="phoneNumber" name="phoneNumber" type="tel" class="validate" [(ngModel)]="user.phoneNumber">
+                    <label for="phoneNumber">Número de Teléfono</label>
+                </div>
+                <div class="input-field col s8">
+                    <input id="password" type="password" name="password" minlength="6" [(ngModel)]="user.password">
+                    <label for="password">Nueva Contraseña (mín. 6 caracteres)</label>
+                </div>
+                <div class="col s4">
+                    <label><input type="checkbox" (click)="togglePasswordVisibility()">
+                        <span>Mostrar Contraseña</span>
+                    </label>
+                </div>
+                <div class="col s12">
+                    <button class="btn waves-effect waves-light" type="button" (click)="save()" [disabled]="!hasChanged">Guardar</button>
+                </div>
+            </form>
+        </div>
+        <div id="comprasContent" style="display: none;">
+            <h1>Compras Content</h1>
+        </div>
+        <div id="citasContent" style="display: none;">
+            <ul class="collection">
+                @for (appointment of appointments; track appointment.id) {
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle">beenhere</i>
+                        <span class="title">{{ appointment.name }}</span>
+                        <p>{{ appointment.date | date: 'cccc dd/LLLL/yyyy h:mm a' | titlecase }} <br>
+                            {{ appointment.services }} <br>
+                            {{ appointment.notes }}
+                        </p>
+                      </li>
+                }
+              </ul>
+        </div>
+    </div>
+</div>

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { Router } from '@angular/router';
+import { AppointmentService } from './appointment.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private db: DatabaseService, private router: Router) { }
+  constructor(private db: DatabaseService, private router: Router, private appointmentService: AppointmentService) { }
 
   logout() {
     localStorage.clear();
@@ -26,7 +27,12 @@ export class AuthService {
       data.password = btoa(data.password);
     }
     const user = await this.db.setDocument('users', data);
-    delete user.password;
+    if (sessionStorage.getItem('cita')) {
+      const appointment = JSON.parse(sessionStorage.getItem('cita')!);
+      await this.appointmentService.updateAppointment(appointment.id, user.username);
+      sessionStorage.removeItem('cita');
+
+    }
     localStorage.setItem(user.role !== 'customer' ? 'token' : 'user', JSON.stringify(user));
   }
 
@@ -40,8 +46,6 @@ export class AuthService {
     if (user.password !== atob(userRetrieved.password)) {
       throw new Error('Password does not match');
     }
-    delete userRetrieved.password;
-    console.log(userRetrieved);
     localStorage.setItem(userRetrieved.role !== 'customer' ? 'token' : 'user', JSON.stringify(userRetrieved));
     return userRetrieved;
   }
