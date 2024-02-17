@@ -27,7 +27,7 @@ export class AuthService {
     }
     const user = await this.db.setDocument('users', data);
     delete user.password;
-    localStorage.setItem(user.role ? 'token' : 'user', JSON.stringify(user));
+    localStorage.setItem(user.role !== 'customer' ? 'token' : 'user', JSON.stringify(user));
   }
 
   async enterAccount(user: any) {
@@ -41,7 +41,8 @@ export class AuthService {
       throw new Error('Password does not match');
     }
     delete userRetrieved.password;
-    localStorage.setItem(userRetrieved.role ? 'token' : 'user', JSON.stringify(userRetrieved));
+    console.log(userRetrieved);
+    localStorage.setItem(userRetrieved.role !== 'customer' ? 'token' : 'user', JSON.stringify(userRetrieved));
     return userRetrieved;
   }
 

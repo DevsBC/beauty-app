@@ -19,6 +19,6 @@
 
 <div id="modal1" class="modal">
   @if (modalAppointment.isOpen) {
-    <app-booking-form (onSubmit)="close()"></app-booking-form>
+    <app-booking-form (onSubmit)="close($event)"></app-booking-form>
   }
 </div>

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { BookingFormComponent } from '../booking-form/booking-form.component';
+import { Appointment } from '../../schema.database';
 
 @Component({
   selector: 'app-navbar',
@@ -38,8 +39,17 @@ export class NavbarComponent implements OnInit {
     this.modalAppointment.open();
   }
 
-  close() {
+  close(data: Appointment) {
+    let footer = '<a href="/register">Crear mi cuenta</a>';
+    if (data.createdBy) {
+      footer = '<a href="/profile">Ir a mi cuenta</a>';
+    }
     this.modalAppointment.close();
+    this.showAlert({ title: 'Tu cita ha sido confirmada', footer });
+  }
+
+  showAlert(params: any) {
+    (window as any).Swal.fire(params);
   }
 
 }

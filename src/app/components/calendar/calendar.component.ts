@@ -33,7 +33,8 @@ export class CalendarComponent implements OnDestroy {
   constructor(private auth: AuthService, private appointmentsService: AppointmentService) {
     this.currentUser = this.auth.getUser();
     this.role = this.currentUser ? this.currentUser.role : 'customer';
-    this.sub = this.appointmentsService.getEvents().subscribe(data => {
+    const path = window.location.pathname;
+    this.sub = this.appointmentsService.getEvents(path !== '/appointments').subscribe(data => {
       this.events = data;
       this.renderCalendar();
     })
@@ -74,10 +75,11 @@ export class CalendarComponent implements OnDestroy {
       slotMaxTime: `${this.CLOSE_BUSINESS}:00`,
       events: this.events,
       dateClick: (info: any) => {
+        console.log(info)
         if (calendar.view.type === 'dayGridMonth') {
           return;
         }
-        const date = new Date(info.dateStr);
+        const date = new Date(info.date);
         const hour = date.getHours();
         const currentDate = new Date();
         const currentHour = currentDate.getHours();

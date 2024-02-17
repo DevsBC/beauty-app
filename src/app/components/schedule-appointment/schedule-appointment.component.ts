@@ -26,7 +26,7 @@ export class ScheduleAppointmentComponent {
 
   onDateClick(info: any) {
     this.appointment = {
-      name: '',
+      name: this.user ? (this.user.role === 'customer' ? this.user.fullName : '') : '',
       status: 'Confirmada',
       services: [ 'Corte de cabello' ],
       date: info.dateStr,

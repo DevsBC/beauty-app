@@ -15,13 +15,18 @@ export class AppointmentService {
     return this.db.getSnapshot(this.collectionName) as Observable<Appointment[]>;
   }
 
-  getEvents() {
+  getEvents(todayEvents = false) {
     const path = this.db.getPath(this.collectionName);
+    let request = query(collection(this.db.db, path), where('status', '==', 'Confirmada'));
+    if (todayEvents) {
+      const startOfToday = new Date();
+      startOfToday.setHours(0,0,0,0);
+      request = query(collection(this.db.db, path), where('status', '==', 'Confirmada'), where('date', '>=', startOfToday.toISOString()));
+    }
     return new Observable<any>(observer => {
-      return onSnapshot(query(collection(this.db.db, path), where('status', '==', 'Confirmada')),
+      return onSnapshot(request,
         (snapshot => {
           const data: any[] = [];
-          
           snapshot.docs.forEach(d => {
             const obj = d.data() as any;
             data.push({ id: obj.id, title: obj.name, start: obj.date });

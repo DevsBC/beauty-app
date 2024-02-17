@@ -22,7 +22,7 @@ export class LoginComponent {
     if (this.user.username && this.user.password) {
       try {
         const user = await this.auth.enterAccount(this.user);
-        if (user.role) {
+        if (user.role !== 'customer') {
           window.location.href = '/admin';
         } else {
           window.location.href = '/profile';
