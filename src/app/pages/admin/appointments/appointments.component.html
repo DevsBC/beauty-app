@@ -1,5 +1,9 @@
 <h2>Citas</h2>
 <app-schedule-appointment></app-schedule-appointment>
+<div class="input-field col s12">
+    <input id="search" type="text" class="validate" (keyup)="filter($event)">
+    <label for="search">Buscar</label>
+</div>
 <table class="striped highlight">
     <thead>
         <tr>

@@ -1,6 +1,8 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { User } from '../../schema.database';
 import { AuthService } from '../../services/auth.service';
+import { AppointmentService } from '../../services/appointment.service';
+import { Subscription } from 'rxjs';
 
 enum Days {
   SUNDAY = 0,
@@ -19,26 +21,35 @@ enum Days {
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css'
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnDestroy {
+  events: { id: string, title: string, start: string }[] = [];
+  @Output() onDateClick = new EventEmitter();
   readonly OPEN_BUSINESS = 10;
   readonly CLOSE_BUSINESS = 18;
   readonly currentUser: User;
-  toolbar: any = {
-    start: 'dayGridMonth,timeGridWeek,timeGridDay'
-  }
-  constructor(private auth: AuthService) {
-    this.currentUser = this.auth.getUser();
-    if (!this.currentUser || this.currentUser?.role === 'customer') {
-      this.toolbar = undefined;
-    }
-  }
-  @Output() onDateClick = new EventEmitter();
 
-  ngOnInit(): void {
+  sub: Subscription;
+  role: string;
+  constructor(private auth: AuthService, private appointmentsService: AppointmentService) {
+    this.currentUser = this.auth.getUser();
+    this.role = this.currentUser ? this.currentUser.role : 'customer';
+    this.sub = this.appointmentsService.getEvents().subscribe(data => {
+      this.events = data;
+      this.renderCalendar();
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+
+  renderCalendar() {
     const calendar = new (window as any).FullCalendar.Calendar(document.getElementById('calendar'), {
       initialView: 'timeGridWeek',
       locale: 'es',
-      headerToolbar: this.toolbar,
+      headerToolbar: this.role === 'customer' ? undefined : {
+        start: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
       buttonText: {
         today: 'Hoy',
         month: 'Mes',
@@ -49,24 +60,36 @@ export class CalendarComponent implements OnInit {
       views: {
         timeGridWeek: {
           validRange: {
-            start: new Date(),
-            end: this.currentUser?.role !== 'customer' ? null : new Date().setMonth(new Date().getMonth() + 1)
+            start: this.role !== 'customer' ? undefined : new Date(),
+            end: this.role !== 'customer' ? undefined : new Date().setMonth(new Date().getMonth() + 1)
           }
         }
       },
       allDaySlot: false,
       selectable: true,
-      eventMinHeight: 30,
+      nowIndicator: true,
+      defaultTimedEventDuration: '00:30',
       hiddenDays: [Days.SATURDAY, Days.SUNDAY],
       slotMinTime: `${this.OPEN_BUSINESS}:00`,
       slotMaxTime: `${this.CLOSE_BUSINESS}:00`,
+      events: this.events,
       dateClick: (info: any) => {
         if (calendar.view.type === 'dayGridMonth') {
           return;
         }
-        const hour = new Date(info.dateStr).getHours();
+        const date = new Date(info.dateStr);
+        const hour = date.getHours();
+        const currentDate = new Date();
+        const currentHour = currentDate.getHours();
         if (hour >= this.OPEN_BUSINESS && hour <= this.CLOSE_BUSINESS) {
-          this.onDateClick.emit(info);
+          if (date.getDate() === currentDate.getDate()) {
+            if (hour >= currentHour) {
+              this.onDateClick.emit(info);
+            }
+          } else {
+            this.onDateClick.emit(info);
+          }
+         
         }
       }
     });

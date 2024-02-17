@@ -42,7 +42,7 @@ export class DatabaseService {
     console.log(this.baseCollection)
   }
 
-  private getPath(path: string) {
+  public getPath(path: string) {
     return `${this.baseCollection}/${path}`;
   }
 
@@ -115,14 +115,11 @@ export class DatabaseService {
 
   public getSnapshot(collectionName: string) {
     const path = this.getPath(collectionName);
-    console.log(path);
     return new Observable(observer => {
       return onSnapshot(collection(this.db, path),
         (snapshot => {
           const data: any[] = [];
-          
           snapshot.docs.forEach(d => data.push(d.data()));
-          console.log(data);
           observer.next(data);
         }),
         (error => observer.error(error.message))
