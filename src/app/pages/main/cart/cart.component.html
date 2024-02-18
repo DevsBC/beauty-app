@@ -1,1 +1,40 @@
-<p>cart works!</p>
+<h2>Carrito de compras</h2>
+
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th style="width: 80%;">Nombre</th>
+                <th style="width: 10%;">Cantidad</th>
+                <th style="width: 10%;">Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (item of cart.items; track item.id) {
+                <tr>
+                    <td><img class="materialboxed" [src]="item.image" [alt]="item.name" width="80px"></td>
+                    <td>{{ item.name }} </td>
+                    <td>
+                        <div class="input-field">
+                            <input [id]="item.id" type="number" name="quantity" [(ngModel)]="item.quantity" min="1" (change)="addQty(item)">
+                        </div>
+                        </td>   
+                    <td>$ {{ item.price * item.quantity! }} MXN</td>
+                    <td><button class="btn red">Eliminar</button></td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3"><b>Total ({{cart.count}} articulos)</b></td>
+                <td><b>$ {{ cart.total }} MXN</b></td>
+                <td><button class="btn red">Vaciar</button></td>
+
+            </tr>
+        </tfoot>
+    </table>
+    <a class="waves-effect waves-light btn checkout">Confirmar</a>
+</div>
+

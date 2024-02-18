@@ -57,7 +57,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       console.log('nothing has changed');
       return;
     }
-
+    this.product.image = 'assets/images/products/' + this.product.image;
     if (this.product.id) {
       this.productService.setProduct(this.product, true);
     } else {

@@ -14,6 +14,11 @@ export class ProductService {
     return this.db.getSnapshot(this.collection) as Observable<Product[]>;
   }
 
+  getStore() {
+    return this.db.getCollection(this.collection, { property: 'stock', condition: '>', value: 0 }) as Promise<Product[]>;
+
+  }
+
   async setProduct(data: Product, edit = false) {
     if (!edit) {
       const product = await this.getProduct(data.name);

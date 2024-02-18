@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { BookingFormComponent } from '../booking-form/booking-form.component';
 import { Appointment } from '../../schema.database';
+import { CartService } from '../../services/cart.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,18 +14,22 @@ import { Appointment } from '../../schema.database';
 })
 export class NavbarComponent implements OnInit {
   classColor = '';
-  modalAppointment: any
-  constructor(private router: Router) {}
+  modalAppointment: any;
+  count = 0;
+  constructor(private router: Router, private cartService: CartService) {
+    this.cartService.getTotal().subscribe(data => this.count = data.count);
+  }
   ngOnInit(): void {
     this.modalAppointment = (window as any).M.Modal.init(document.querySelector('.modal'), {});
     document.addEventListener('scroll', () => {
       const scrollPosition = window.scrollY;
       if (scrollPosition > 80) {
-        this.classColor = 'transparent';
+        this.classColor = window.location.pathname === '/' ? 'transparent' : '';
       } else {
         this.classColor = '';
       }
-    })
+    });
+    
   }
 
   goToProfile() {

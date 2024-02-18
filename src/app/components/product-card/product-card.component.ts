@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Product } from '../../schema.database';
 
 @Component({
@@ -10,4 +10,9 @@ import { Product } from '../../schema.database';
 })
 export class ProductCardComponent {
   @Input() product = {} as Product;
+  @Output() addToCart =  new EventEmitter();
+
+  add() {
+    this.addToCart.emit(this.product);
+  }
 }

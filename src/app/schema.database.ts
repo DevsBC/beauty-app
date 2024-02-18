@@ -18,6 +18,7 @@ export interface Cart extends Entity {
     items: Product[];
     total: number;
     count: number;
+    username: string | null;
 }
 
 export interface User extends Entity {

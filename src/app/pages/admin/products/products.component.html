@@ -27,7 +27,7 @@
                 <tr [class]="product.stock === 0 ? 'red lighten-2' : ''">
                     <td>{{ product.name }}</td>
                     <td>{{ product.description }}</td>
-                    <td><img class="responsive-img" width="80" [src]="'assets/images/products/' + product.image"></td>
+                    <td><img class="responsive-img" width="80" [src]="product.image"></td>
                     <td>{{ product.price }}</td>
                     <td>{{ product.stock }}</td>
                     <td><a class="waves-effect waves-teal btn modal-trigger" (click)="edit(product)" href="#modal-product">Editar</a></td>
