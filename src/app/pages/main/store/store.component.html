@@ -1,7 +1,7 @@
 <h2>Tienda</h2>
 <div class="input-field col s10">
-    <input id="search" type="text" class="validate">
-    <label for="search">Buscar</label>
+    <input id="search" type="search" (keyup)="filter($event)">
+    <label class="label-icon" for="search">Buscar</label>
 </div>
 <div class="row">
     @for (product of products; track product.id) {

@@ -50,8 +50,8 @@ export class AppointmentService {
     return appointment;
   }
 
-  async updateAppointment(id: string, createdBy: string) {
-    await this.db.updateDocument(this.collectionName, id, { createdBy });
+  async updateAppointment(id: string, data: any) {
+    await this.db.updateDocument(this.collectionName, id, data);
   }
 
   async getAppointmentsByUsername(username: string) {

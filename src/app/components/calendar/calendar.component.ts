@@ -75,7 +75,6 @@ export class CalendarComponent implements OnDestroy {
       slotMaxTime: `${this.CLOSE_BUSINESS}:00`,
       events: this.events,
       dateClick: (info: any) => {
-        console.log(info)
         if (calendar.view.type === 'dayGridMonth') {
           return;
         }

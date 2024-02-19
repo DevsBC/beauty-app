@@ -19,7 +19,7 @@
             </li>
             <li class="collection-item">
                 <i class="material-icons left">logout</i>
-                <a class="waves-effect" style="color: red;" (click)="logout()">Cerrar sesion</a>
+                <a class="waves-effect" style="color: red;" (click)="logout()">Salir de mi cuenta</a>
             </li>
 
         </ul>
@@ -60,7 +60,51 @@
             </form>
         </div>
         <div id="comprasContent" style="display: none;">
-            <h1>Compras Content</h1>
+            <ul class="collapsible popout">
+                @for (order of orders; track order.id) {
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">receipt</i>
+                            <div class="row">
+                                <div class="col">
+                                    # {{ order.ref }}
+                                </div>
+                                <div class="col">
+                                    $ {{ order.total }} MXN
+                                </div>
+                            </div>
+                            <span style="margin-left: auto;">Estado: {{ order.status }}</span>
+
+                        </div>
+                       
+                        <div class="collapsible-body">
+                          <div class="collection">
+                            @for (item of order.items; track item.id) {
+                              <li class="collection-item avatar">
+                                <img [src]="item.image" [alt]="item.name" class="circle">
+                                  <span class="title">{{ item.name }} X {{ item.quantity }}</span>
+                                    <p>$ {{ item.price }} MXN <br>
+                                        {{ item.description }}
+                                    </p>
+                              </li>
+                            }
+                            @if (order.status === 'Pendiente') {
+                                <button class="btn red right" style="margin-top: 20px;" (click)="cancelOrder(order)">Cancelar Orden</button>
+                            }
+
+                            @if (order.status === 'Confirmada') {
+                                <button class="btn right" style="margin-top: 20px;" (click)="notifyMyArrival(order)" [disabled]="order.hasArrived">Avisar de mi llegada</button>
+                            }
+
+                            @if (order.status === 'Cancelada') {
+                                <p>Razón de cancelación: {{ order.cancellationReason }}</p>
+                            }
+                          </div>
+
+                        </div>
+                    </li>
+                }
+            </ul>
         </div>
         <div id="citasContent" style="display: none;">
             <ul class="collection">
@@ -72,7 +116,18 @@
                             {{ appointment.services }} <br>
                             {{ appointment.notes }}
                         </p>
-                      </li>
+                        <div class="secondary-content">
+                            @if (appointment.status === 'Confirmada') {
+                                <button class="btn red" (click)="cancelAppointment(appointment)">Cancelar cita</button>
+                            } @else {
+                                <p>{{ appointment.status }}</p>
+                                @if (appointment.status === 'Cancelada') {
+                                    <p>{{ appointment.cancellationReason }}</p>
+                                }
+                            }
+                        </div>
+
+                    </li>
                 }
               </ul>
         </div>

@@ -43,9 +43,21 @@ export class CartService {
     return product;
   }
 
-  removeFromCart() {}
+  removeFromCart(id: string) {
+    const cart = this.getCart();
+    cart.items = cart.items.filter(i => i.id !== id);
+    const { total, count } = this.calculateTotal(cart);
+    cart.count = count;
+    cart.total = total;
+    localStorage.setItem('cart', JSON.stringify(cart));
+    return cart;
+  } 
 
-  clearCart() {}
+  clearCart() {
+    localStorage.removeItem('cart');
+    this.totalSubject.next({ total: 0, count: 0 });
+    return this.getCart();
+  }
 
   getTotal() {
     return this.totalSubject.pipe();

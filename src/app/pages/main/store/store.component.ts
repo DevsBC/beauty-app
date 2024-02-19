@@ -15,6 +15,7 @@ import { CartService } from '../../../services/cart.service';
 })
 export class StoreComponent implements OnInit {
   products: Product[] = [];
+  copy: Product[] = [];
   user: User;
   constructor(private productService: ProductService, private auth: AuthService,
               private cartService: CartService) {
@@ -23,6 +24,16 @@ export class StoreComponent implements OnInit {
 
   async ngOnInit() {
     this.products = await this.productService.getStore();
+    this.copy = [...this.products];
+  }
+
+  filter(event: any) {
+    const term = event.target.value;
+    if (term && term.length > 2) { 
+      this.products = this.copy.filter(p => p.name.toLowerCase().includes(term.toLowerCase()));
+    } else {
+      this.products = [...this.copy];
+    }
   }
 
   onClickAdd(product: Product) {

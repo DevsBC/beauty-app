@@ -1,7 +1,7 @@
 interface Entity {
     id?: string;
-    creationDate?: string;
-    updateDate?: string;
+    creationDate?: { nanoseconds: number, seconds: number };
+    updateDate?: { nanoseconds: number, seconds: number };
     context?: string;
 }
 
@@ -38,4 +38,17 @@ export interface Appointment extends Entity {
     createdBy: string | null;
     notes?: string;
     attendedBy?: string;
+    cancellationReason?: string;
+}
+
+export interface Order extends Entity {
+    ref: string;
+    items: Product[];
+    itemsQuantity: number;
+    total: number;
+    status: 'Pendiente' | 'Confirmada' | 'Cancelada' | 'Completada' | string;
+    username: string | null;
+    attendedBy: string | null;
+    hasArrived: boolean;
+    cancellationReason?: string;
 }

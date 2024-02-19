@@ -1,40 +1,50 @@
 <h2>Carrito de compras</h2>
 
 <div class="container">
-    <table>
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th style="width: 80%;">Nombre</th>
-                <th style="width: 10%;">Cantidad</th>
-                <th style="width: 10%;">Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (item of cart.items; track item.id) {
-                <tr>
-                    <td><img class="materialboxed" [src]="item.image" [alt]="item.name" width="80px"></td>
-                    <td>{{ item.name }} </td>
-                    <td>
-                        <div class="input-field">
-                            <input [id]="item.id" type="number" name="quantity" [(ngModel)]="item.quantity" min="1" (change)="addQty(item)">
-                        </div>
-                        </td>   
-                    <td>$ {{ item.price * item.quantity! }} MXN</td>
-                    <td><button class="btn red">Eliminar</button></td>
-                </tr>
-            }
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3"><b>Total ({{cart.count}} articulos)</b></td>
-                <td><b>$ {{ cart.total }} MXN</b></td>
-                <td><button class="btn red">Vaciar</button></td>
+    @if (cart.total > 0) {
 
-            </tr>
-        </tfoot>
-    </table>
-    <a class="waves-effect waves-light btn checkout">Confirmar</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th style="width: 70%;">Nombre</th>
+                    <th style="width: 10%;">Cantidad</th>
+                    <th style="width: 10%;">Precio</th>
+                    <th style="width: 10%;">Subtotal</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (item of cart.items; track item.id) {
+                    <tr>
+                        <td><img class="materialboxed" [src]="item.image" [alt]="item.name" width="80px"></td>
+                        <td>{{ item.name }} </td>
+                        <td>
+                            <div class="input-field">
+                                <input [id]="item.id" type="number" name="quantity" [(ngModel)]="item.quantity" min="1" (change)="addQty(item)">
+                            </div>
+                        </td>
+                        <td>$ {{ item.price }} MXN</td>
+                        <td>$ {{ item.price * item.quantity! }} MXN</td>
+                        <td><button class="btn red" (click)="remove(item)">Eliminar</button></td>
+                    </tr>
+                }
+            </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"><b>Total ({{cart.count}} articulos)</b></td>
+                        <td><b>$ {{ cart.total }} MXN</b></td>
+                        <td><button class="btn red" (click)="empty()">Vaciar</button></td>
+        
+                    </tr>
+                </tfoot>
+        </table>
+    }
+
+    @if (cart.total > 0) {
+        <a class="waves-effect waves-light btn checkout" (click)="open()">Confirmar</a>
+    } @else {
+        <a class="waves-effect waves-light btn" style="width: 100%;" routerLink="/store">Ir a tienda</a>
+    }
 </div>
 

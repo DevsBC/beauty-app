@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { DatabaseService } from './database.service';
 import { Router } from '@angular/router';
 import { AppointmentService } from './appointment.service';
+import { OrderService } from './order.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private db: DatabaseService, private router: Router, private appointmentService: AppointmentService) { }
+  constructor(private db: DatabaseService, private router: Router, 
+    private appointmentService: AppointmentService, private orderService: OrderService) { }
 
   logout() {
     localStorage.clear();
@@ -27,12 +29,9 @@ export class AuthService {
       data.password = btoa(data.password);
     }
     const user = await this.db.setDocument('users', data);
-    if (sessionStorage.getItem('cita')) {
-      const appointment = JSON.parse(sessionStorage.getItem('cita')!);
-      await this.appointmentService.updateAppointment(appointment.id, user.username);
-      sessionStorage.removeItem('cita');
 
-    }
+    await this.setUserSettings(user.username);
+
     localStorage.setItem(user.role !== 'customer' ? 'token' : 'user', JSON.stringify(user));
   }
 
@@ -46,6 +45,9 @@ export class AuthService {
     if (user.password !== atob(userRetrieved.password)) {
       throw new Error('Password does not match');
     }
+
+    await this.setUserSettings(userRetrieved.username);
+
     localStorage.setItem(userRetrieved.role !== 'customer' ? 'token' : 'user', JSON.stringify(userRetrieved));
     return userRetrieved;
   }
@@ -57,7 +59,21 @@ export class AuthService {
 
   private async getUsers(name: string) {
     return await this.db.getCollection('users', { property: 'username', condition: '==', value: name }) as any[];
+  }
 
+  private async setUserSettings(username: string) {
+    if (sessionStorage.getItem('cita')) {
+      const appointment = JSON.parse(sessionStorage.getItem('cita')!);
+      await this.appointmentService.updateAppointment(appointment.id, { createdBy: username });
+      sessionStorage.removeItem('cita');
+
+    }
+
+    if (sessionStorage.getItem('order')) {
+      const order = JSON.parse(sessionStorage.getItem('order')!);
+      await this.orderService.updateStatus(order.id, { username });
+      sessionStorage.removeItem('order');
+    }
   }
 
 }

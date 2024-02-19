@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { Appointment, User } from '../../../schema.database';
+import { Appointment, Order, User } from '../../../schema.database';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { AppointmentService } from '../../../services/appointment.service';
 import { DatePipe, TitleCasePipe } from '@angular/common';
+import { OrderService } from '../../../services/order.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,17 +19,22 @@ export class ProfileComponent implements OnInit {
   password = '';
   hasChanged = false;
   appointments: Appointment[] = [];
-  constructor(private auth: AuthService, private userService: UserService, private appointmentService: AppointmentService) {
+  orders: Order[] = [];
+  constructor(private auth: AuthService, private userService: UserService, 
+              private appointmentService: AppointmentService, private orderService: OrderService) {
     this.user = this.auth.getUser();
     this.password = this.user.password!;
   }
 
   async ngOnInit() {
     this.appointments = await this.appointmentService.getAppointmentsByUsername(this.user.username);
+    this.orders = await this.orderService.getMyOrders(this.user.username);
+    this.orders = this.orders.sort((a, b) => b.creationDate!.seconds - a.creationDate!.seconds);
+    (window as any).M.Collapsible.init(document.querySelectorAll('.collapsible'));
   }
 
   logout() {
-    this.auth.logout()
+    this.auth.logout();
   }
 
   showContent(tab: string) {
@@ -58,7 +64,66 @@ export class ProfileComponent implements OnInit {
     this.hasChanged = false;
   }
 
+  cancelOrder(order: Order) {
+    this.showAlert({
+      title: "Cancelar Orden",
+      text: "Deseas cancelar la order: " + order.ref,
+      icon: "warning",
+      input: "text",
+      inputLabel: "Razón de cancelación",
+      inputValue: "El cliente ha cancelado la orden",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: 'No',
+      confirmButtonText: "Si, cancelar"
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await this.orderService.updateStatus(order.id!, { status: 'Cancelada', cancellationReason: result.value });
+        order.status = 'Cancelada';
+        order.cancellationReason = result.value;
+        this.showAlert({
+          title: "Cancelada!",
+          text: "La orden " + order.ref + " ha sido cancelada",
+          icon: "success"
+        });
+      }
+    });
+  }
+
+  cancelAppointment(appointment: Appointment) {
+    this.showAlert({
+      title: "Cancelación de cita",
+      text: "Deseas cancelar la cita: " + new Date(appointment.date),
+      icon: "warning",
+      input: "text",
+      inputLabel: "Razón de cancelación",
+      inputValue: "El cliente ha cancelado la cita",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: 'No',
+      confirmButtonText: "Si, cancelar"
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await this.appointmentService.updateAppointment(appointment.id!, { status: 'Cancelada', cancellationReason: result.value });
+        appointment.status = 'Cancelada';
+        appointment.cancellationReason = result.value;
+        this.showAlert({
+          title: "Cancelada!",
+          text: "La cita ha sido cancelada",
+          icon: "success"
+        });
+      }
+    });
+  }
+
+  async notifyMyArrival(order: Order) {
+    await this.orderService.updateStatus(order.id!, { hasArrived: true });
+    order.hasArrived = true;
+  }
+
   private showAlert(params: any) {
-    (window as any).Swal.fire(params);
+    return (window as any).Swal.fire(params)as any;
   }
 }
