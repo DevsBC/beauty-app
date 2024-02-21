@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { BookingFormComponent } from '../booking-form/booking-form.component';
 import { Appointment } from '../../schema.database';
 import { CartService } from '../../services/cart.service';
@@ -8,7 +8,7 @@ import { CartService } from '../../services/cart.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterLink, BookingFormComponent],
+  imports: [CommonModule, RouterLink, BookingFormComponent, RouterLinkActive],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })

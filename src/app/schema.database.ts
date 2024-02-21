@@ -52,3 +52,9 @@ export interface Order extends Entity {
     hasArrived: boolean;
     cancellationReason?: string;
 }
+
+export interface Message extends Entity {
+    name: string;
+    email: string;
+    content: string;
+}

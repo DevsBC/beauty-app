@@ -14,6 +14,22 @@ export class ProductService {
     return this.db.getSnapshot(this.collection) as Observable<Product[]>;
   }
 
+  async getFeaturedProducts() {
+    const products = await this.db.getCollection(this.collection, { property: 'stock', condition: '>', value: 0 });
+    // Make a copy of the products to avoid modifying the original
+    const shuffledProducts = [...products];
+    
+    const randomProducts = [];
+
+    while (randomProducts.length < Math.min(4, products.length)) {
+      const randomIndex = Math.floor(Math.random() * shuffledProducts.length);
+      const randomProduct = shuffledProducts.splice(randomIndex, 1)[0];
+      randomProducts.push(randomProduct);
+    }
+  
+    return randomProducts;
+  }
+
   getStore() {
     return this.db.getCollection(this.collection, { property: 'stock', condition: '>', value: 0 }) as Promise<Product[]>;
 

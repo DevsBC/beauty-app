@@ -2,9 +2,9 @@
     <nav [ngClass]="['scale-transition', classColor]">
       <div class="nav-wrapper">
         <ul class="left hide-on-med-and-down">
-            <li><a routerLink="/">Inicio</a></li>
-            <li><a routerLink="/store">Tienda</a></li>
-            <li><a routerLink="/about">Quienes somos</a></li>
+            <li routerLinkActive="active"  [routerLinkActiveOptions]="{exact: true}"><a routerLink="/" >Inicio</a></li>
+            <li routerLinkActive="active"><a routerLink="/store" >Tienda</a></li>
+            <li routerLinkActive="active"><a routerLink="/about">Quienes somos</a></li>
             <li><a class="waves-effect waves-light btn"(click)="open()">Agendar cita</a></li>
         </ul>
         <a  routerLink="/" class="brand-logo center">Beauty App</a>

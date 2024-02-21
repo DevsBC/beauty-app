@@ -1,11 +1,4 @@
 <app-carousel></app-carousel>
-<!-- <blockquote class="center-align hoverable">
-    <h6>
-        Somos un establecimiento de belleza con más de 23 años de trayectoria y arraigo en Ciudad Juárez. Nos destacamos por superar las expectativas de nuestros clientes, quienes buscan las opciones más destacadas en tratamientos de la industria de la belleza.
-        Nuestra principal meta es llevar a cabo tratamientos de belleza que proporcionen satisfacción visual y emocional a las personas. Es por esta razón que nos respaldamos en la innovación de productos y servicios, manteniéndonos siempre a la vanguardia en el ámbito de la moda.
-    </h6>
-   
-</blockquote> -->
 
 <h3 class="center">Servicios</h3>
 <div class="row">
@@ -19,7 +12,7 @@
 <h3 class="center">Productos destacados</h3>
 <div class="row">
     @for (product of featuredProducts; track product.id) {
-        <app-product-card [product]="product"></app-product-card>
+        <app-product-card [product]="product" (addToCart)="onClickAdd($event)"></app-product-card>
     }
 </div>
              

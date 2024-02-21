@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.fullscreen {
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom, #3d053f, #b17dc9);
+    color: #fff;
+    text-align: center;
+}
+
+p {
+    font-size: 20pt;
+    line-height: 40pt;
+}
+
+.vision-mission {
+    padding: 40px 0;
+    text-align: center;
+}
+
+
+.customer-review {
+    background: #f9f9f9;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.review {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 20px;
+}

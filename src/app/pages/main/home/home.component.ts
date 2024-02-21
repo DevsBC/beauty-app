@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CarouselComponent } from '../../../components/carousel/carousel.component';
 import { ProductCardComponent } from '../../../components/product-card/product-card.component';
+import { ProductService } from '../../../services/product.service';
+import { Product } from '../../../schema.database';
+import { CartService } from '../../../services/cart.service';
 
 @Component({
   selector: 'app-home',
@@ -10,40 +13,16 @@ import { ProductCardComponent } from '../../../components/product-card/product-c
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  featuredProducts = [
-    { 
-      id: '1',
-      name: 'Crema Rejuvenecedora', 
-      description: 'La Crema Rejuvenecedora es una fórmula avanzada que revitaliza la piel, proporcionando hidratación intensiva y combatiendo los signos del envejecimiento.',
-      image: 'assets/images/insta-item3.jpg',
-      price: 99
-    },
-    { 
-      id: '2',
-      name: 'Crema Rejuvenecedora', 
-      description: 'La Crema Rejuvenecedora es una fórmula avanzada que revitaliza la piel, proporcionando hidratación intensiva y combatiendo los signos del envejecimiento.',
-      image: 'assets/images/insta-item3.jpg',
-      price: 99
-    },
-    { 
-      id: '3',
-      name: 'Crema Rejuvenecedora', 
-      description: 'La Crema Rejuvenecedora es una fórmula avanzada que revitaliza la piel, proporcionando hidratación intensiva y combatiendo los signos del envejecimiento.',
-      image: 'assets/images/insta-item3.jpg',
-      price: 99
-    },
-    { 
-      id: '3',
-      name: 'Crema Rejuvenecedora', 
-      description: 'La Crema Rejuvenecedora es una fórmula avanzada que revitaliza la piel, proporcionando hidratación intensiva y combatiendo los signos del envejecimiento.',
-      image: 'assets/images/insta-item3.jpg',
-      price: 99
-    }
-  ]
-  ngOnInit() {
-    var elems = document.querySelectorAll('.materialboxed');
-    (window as any).M.Materialbox.init(elems);
-    const instance = (window as any).M.Carousel.init(document.querySelector('.carousel'), { fullWidth: true, indicators: true });
-    console.log(instance)
+  featuredProducts: Product[] = [];
+
+  constructor(private productService: ProductService, private cartService: CartService) {}
+  async ngOnInit() {
+    (window as any).M.Materialbox.init(document.querySelectorAll('.materialboxed'));
+    (window as any).M.Carousel.init(document.querySelector('.carousel'), { fullWidth: true, indicators: true });
+    this.featuredProducts = await this.productService.getFeaturedProducts();
+  }
+
+  onClickAdd(product: Product) {
+    this.cartService.addToCart(product);
   }
 }

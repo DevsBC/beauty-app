@@ -8,30 +8,28 @@
           <form id="form" class="col s12 white">
             <div class="row">
               <div class="input-field col s6">
-                <input id="name" type="text" class="validate">
+                <input id="name" type="text" class="validate" name="name" [(ngModel)]="message.name">
                 <label for="name">Nombre</label>
               </div>
               <div class="input-field col s6">
-                <input id="email" type="email" class="validate">
-                <label for="email">Correo electronico</label>
+                <input id="email" type="email" class="validate" name="email" [(ngModel)]="message.email">
+                <label for="email">Correo electrónico</label>
               </div>
-            </div>
-            
-            <div class="row">
-              
             </div>
             
             
             <div class="row">
               <div class="input-field col s12">
-                <textarea id="message" class="materialize-textarea"></textarea>
+                <textarea id="message" class="materialize-textarea" name="content" [(ngModel)]="message.content"></textarea>
                 <label for="message">Escribe tu mensaje</label>
               </div>
             </div>
-            
+            @if (error) {
+              <blockquote style="color:black">{{ error }}</blockquote>
+            }
             <div class="row">
               <div class="input-field col s12">
-                <button class="waves-effect waves-teal btn-flat" type="button">Enviar
+                <button class="waves-effect waves-teal btn-flat" type="button" (click)="send()">Enviar
                   <i class="material-icons right">send</i>
                 </button>
               </div>
@@ -40,14 +38,14 @@
           
           
         </div>
-        <div class="col l4 offset-l2 s12">
+        <!-- <div class="col l4 offset-l2 s12">
           <h5 class="white-text">Redes sociales</h5>
           <ul>
             <li><a class="grey-text text-lighten-3">Instagram</a></li>
             <li><a class="grey-text text-lighten-3">Facebook</a></li>
             <li><a class="grey-text text-lighten-3">X / Twitter</a></li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="footer-copyright">
