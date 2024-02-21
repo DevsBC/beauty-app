@@ -12,6 +12,7 @@ export interface Product extends Entity {
     price: number;
     quantity?: number;
     stock?: number;
+    toSupply?: number;
 }
 
 export interface Cart extends Entity {
@@ -50,7 +51,7 @@ export interface Order extends Entity {
     username: string | null;
     attendedBy: string | null;
     hasArrived: boolean;
-    cancellationReason?: string;
+    cancellationReason?: string | null;
 }
 
 export interface Message extends Entity {

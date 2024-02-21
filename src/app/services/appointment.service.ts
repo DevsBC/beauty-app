@@ -15,7 +15,7 @@ export class AppointmentService {
     return this.db.getSnapshot(this.collectionName) as Observable<Appointment[]>;
   }
 
-  getEvents(todayEvents = false) {
+  getEvents(todayEvents = false, showInfo = false) {
     const path = this.db.getPath(this.collectionName);
     let request = query(collection(this.db.db, path), where('status', '==', 'Confirmada'));
     if (todayEvents) {
@@ -29,7 +29,11 @@ export class AppointmentService {
           const data: any[] = [];
           snapshot.docs.forEach(d => {
             const obj = d.data() as any;
-            data.push({ id: obj.id, title: obj.name, start: obj.date });
+            let title = obj.name;
+            if (showInfo) {
+              title = `${obj.name} (${obj.services})`;
+            }
+            data.push({ id: obj.id, title, start: obj.date });
           });
           observer.next(data);
         }),

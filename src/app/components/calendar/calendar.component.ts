@@ -24,20 +24,27 @@ enum Days {
 export class CalendarComponent implements OnDestroy {
   events: { id: string, title: string, start: string }[] = [];
   @Output() onDateClick = new EventEmitter();
+  @Output() onEventClick = new EventEmitter();
   readonly OPEN_BUSINESS = 10;
   readonly CLOSE_BUSINESS = 18;
   readonly currentUser: User;
 
   sub: Subscription;
   role: string;
+  initialView = 'timeGridWeek'
+  path: string
   constructor(private auth: AuthService, private appointmentsService: AppointmentService) {
     this.currentUser = this.auth.getUser();
     this.role = this.currentUser ? this.currentUser.role : 'customer';
-    const path = window.location.pathname;
-    this.sub = this.appointmentsService.getEvents(path !== '/appointments').subscribe(data => {
+    this.path = window.location.pathname;
+    console.log(this.path);
+    if (this.path === '/admin') {
+      this.initialView = 'timeGridDay';
+    }
+    this.sub = this.appointmentsService.getEvents(this.path !== '/appointments', this.path === '/admin').subscribe(data => {
       this.events = data;
       this.renderCalendar();
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -46,11 +53,9 @@ export class CalendarComponent implements OnDestroy {
 
   renderCalendar() {
     const calendar = new (window as any).FullCalendar.Calendar(document.getElementById('calendar'), {
-      initialView: 'timeGridWeek',
+      initialView: this.initialView,
       locale: 'es',
-      headerToolbar: this.role === 'customer' ? undefined : {
-        start: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
+      headerToolbar: this.role === 'customer' ? undefined : (this.path === '/admin' ? undefined  : { start: 'dayGridMonth,timeGridWeek,timeGridDay'}),
       buttonText: {
         today: 'Hoy',
         month: 'Mes',
@@ -91,6 +96,11 @@ export class CalendarComponent implements OnDestroy {
             this.onDateClick.emit(info);
           }
          
+        }
+      },
+      eventClick: (info: any) => {
+        if (calendar.view.type === 'timeGridDay') {
+          this.onEventClick.emit(info.event);
         }
       }
     });

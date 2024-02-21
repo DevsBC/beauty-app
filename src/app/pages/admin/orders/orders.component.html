@@ -1,1 +1,96 @@
-<p>orders works!</p>
+<h2>Ordenes</h2>
+
+<div class="row">
+    <div class="input-field col s12">
+        <input id="search" type="text" class="validate" (keyup)="filter($event)">
+        <label for="search">Buscar</label>
+    </div>
+</div>
+
+<table class="striped highlight">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th># Orden</th>
+            <th># Productos</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Atendido Por</th>
+            <th>Acciones</th>
+        </tr>            
+    </thead>
+    <tbody>
+        @if (orders.length > 0) {
+            @for (order of orders; track order.id) {
+                <tr>
+                    <td>{{ order.creationDate | customDate }}</td>
+                    <td>{{ order.ref }}</td>
+                    <td>{{ order.itemsQuantity }}</td>
+                    <td>$ {{ order.total }} MXN</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.attendedBy }}</td>
+                    <td><a class="waves-effect waves-teal btn modal-trigger" href="#modal-order" (click)="edit(order)">Abrir</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div id="modal-order" class="modal">
+    <div class="modal-content">
+        <h4>Orden: {{ order.ref }}</h4>
+        <form >
+            <table>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                </tr>
+                @for (item of order.items; track item.id) {
+                    <tr>
+                        <th>{{ item.name }}</th>
+                        <th>$ {{ item.price }} MXN</th>
+                        <th>{{ item.quantity }}</th>
+                    </tr>
+                }
+            </table>
+            <div class="input-field">
+                <h6>Estado actual</h6>
+                <p>
+                    <label>
+                      <input name="group1" type="radio" value="Pendiente" [checked]="order.status === 'Pendiente'"  [(ngModel)]="order.status" />
+                      <span>Pendiente</span>
+                    </label>
+                  </p>
+                  <p>
+                    <label>
+                      <input name="group1" type="radio" value="Confirmada" [checked]="order.status === 'Confirmada'" [(ngModel)]="order.status" />
+                      <span>Confirmada</span>
+                    </label>
+                  </p>
+                  <p>
+                    <label>
+                      <input name="group1" type="radio" value="Cancelada" [checked]="order.status === 'Cancelada'" [(ngModel)]="order.status"/>
+                      <span>Cancelada</span>
+                    </label>
+                  </p>
+                  <p>
+                    <label>
+                      <input name="group1" type="radio" value="Completada" [checked]="order.status === 'Completada'" [(ngModel)]="order.status"/>
+                      <span>Completada</span>
+                    </label>
+                  </p>
+            </div>
+            @if (order.status === 'Cancelada') {
+                <div class="input-field">
+                    <input id="fullname" name="cancellationReason" type="text" [(ngModel)]="order.cancellationReason">
+                    <label for="fullname">Razón de cancelación</label>
+                </div>
+            }
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-close waves-effect btn-flat">Cancelar</a>
+        <a class="modal-close waves-effect waves-green btn" (click)="save()">Guardar</a>
+    </div>
+</div>
