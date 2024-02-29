@@ -1,12 +1,12 @@
 <div class="navbar-fixed">
     <nav >
         <div class="nav-wrapper">
-            <ul class="left hide-on-med-and-down">
+            <ul class="left">
                 <li><a>Usuario: {{ user.username }}</a></li>
                 <li><a ><i class="material-icons" (click)="logout()">logout</i></a></li>
             </ul>
             <a class="brand-logo center">Admin Beauty App</a>
-            <ul class="right hide-on-med-and-down">
+            <ul class="right">
                 <li routerLinkActive="active"><a routerLink="/admin" >Inicio</a></li>
                 <li routerLinkActive="active"><a routerLink="/appointments">Citas</a></li>
                 <li routerLinkActive="active"><a routerLink="/orders">Ordenes</a></li>
