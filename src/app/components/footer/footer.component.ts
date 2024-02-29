@@ -49,7 +49,7 @@ export class FooterComponent {
       return false;
     }
     this.error = '';
-    this.message = { name, email, content };
+    this.message = { name, email, content, seen: false, attendedBy: null };
     // If all validations pass, the form is considered valid
     return true;
   }

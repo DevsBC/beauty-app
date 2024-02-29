@@ -16,7 +16,9 @@
             <th>Total</th>
             <th>Estado</th>
             <th>Atendido Por</th>
-            <th>Acciones</th>
+            @if (user.role === 'manager') {
+                <th>Acciones</th>
+            }
         </tr>            
     </thead>
     <tbody>
@@ -29,7 +31,9 @@
                     <td>$ {{ order.total }} MXN</td>
                     <td>{{ order.status }}</td>
                     <td>{{ order.attendedBy }}</td>
-                    <td><a class="waves-effect waves-teal btn modal-trigger" href="#modal-order" (click)="edit(order)">Abrir</a></td>
+                    @if (user.role === 'manager') {
+                        <td><a class="waves-effect waves-teal btn modal-trigger" href="#modal-order" (click)="edit(order)">Abrir</a></td>
+                    }
                 </tr>
             }
         }

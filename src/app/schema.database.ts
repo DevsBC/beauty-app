@@ -58,4 +58,6 @@ export interface Message extends Entity {
     name: string;
     email: string;
     content: string;
+    seen: boolean;
+    attendedBy: string | null;
 }

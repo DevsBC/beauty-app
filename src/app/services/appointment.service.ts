@@ -33,7 +33,7 @@ export class AppointmentService {
             if (showInfo) {
               title = `${obj.name} (${obj.services})`;
             }
-            data.push({ id: obj.id, title, start: obj.date });
+            data.push({ id: obj.id, title, start: obj.date, notes: obj.notes });
           });
           observer.next(data);
         }),
@@ -65,6 +65,26 @@ export class AppointmentService {
 
   deleteappointment(appointment: Appointment) {
     return this.db.deleteDocument(this.collectionName, appointment);
+  }
+
+  async getAnalytics() {
+    const appointments: Appointment[] = await this.db.getCollection(this.collectionName, { property: 'status', condition: '==', value: 'Completada' });
+    const count: any = { employees: {}, dates: {}, services: {} };
+    const sum = (value: any) => (value || 0) + 1;
+    const max = (obj: any, prop: string) => Object.keys(obj[prop]).reduce((a, b) => obj[prop][a] > obj[prop][b] ? a : b, '');
+    for (const appointment of appointments) {
+      count.employees[appointment.attendedBy!] = sum(count.employees[appointment.attendedBy!]);
+      const date = appointment.date.split('T')[0];
+      count.dates[date] = sum(count.dates[date]);
+      for (const service of appointment.services) {
+        count.services[service] = sum(count.services[service]);
+      }
+    }
+
+    count.topEmployee = max(count, 'employees');
+    count.topDate = max(count, 'dates');
+    count.topService = max(count, 'services');
+    return { totalAppointments: appointments.length, ...count }
   }
 
   private async getAppointment(date: string) {

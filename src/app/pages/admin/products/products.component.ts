@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Product } from '../../../schema.database';
+import { Product, User } from '../../../schema.database';
 import { Subscription } from 'rxjs';
 import { ProductService } from '../../../services/product.service';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-products',
@@ -17,7 +18,9 @@ export class ProductsComponent implements OnInit, OnDestroy {
   sub: Subscription;
   product = { } as Product;
   hasChanged = false;
-  constructor(private productService: ProductService) {
+  user: User;
+  constructor(private productService: ProductService, private auth: AuthService) {
+    this.user = this.auth.getUser();
     this.sub = this.productService.getProducts().subscribe(data => {
       this.products = data;
       this.copy = [...this.products];
@@ -57,7 +60,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
       console.log('nothing has changed');
       return;
     }
-    this.product.image = 'assets/images/products/' + this.product.image;
+    this.product.image = this.product.image;
     if (this.product.id) {
       this.productService.setProduct(this.product, true);
     } else {

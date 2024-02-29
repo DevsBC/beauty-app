@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ScheduleAppointmentComponent } from '../../../components/schedule-appointment/schedule-appointment.component';
-import { Appointment } from '../../../schema.database';
+import { Appointment, User } from '../../../schema.database';
 import { DatePipe } from '@angular/common';
 import { AppointmentService } from '../../../services/appointment.service';
 import { Subscription } from 'rxjs';
@@ -16,9 +16,10 @@ import { AuthService } from '../../../services/auth.service';
 export class AppointmentsComponent implements OnInit, OnDestroy {
   appointments: Appointment[] = [];
   copy: any;
-  
+  user: User;
   sub: Subscription;
   constructor(private appointmentService: AppointmentService, private auth: AuthService) {
+    this.user = this.auth.getUser();
     this.sub = this.appointmentService.getAppointments().subscribe(data => {
       this.appointments = data;
       this.copy = [...data];
@@ -33,8 +34,7 @@ export class AppointmentsComponent implements OnInit, OnDestroy {
 
 
   updateStatus(appoinment: Appointment, status: string) {
-    const user = this.auth.getUser();
-    appoinment.attendedBy = user.fullName;
+    appoinment.attendedBy = this.user.username;
     appoinment.status = status;
     this.appointmentService.setAppointment(appoinment, true);
   }

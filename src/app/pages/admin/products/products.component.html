@@ -5,9 +5,11 @@
         <input id="search" type="text" class="validate" (keyup)="filter($event)">
         <label for="search">Buscar</label>
     </div>
-    <div class="col s2">
-        <a class="waves-effect waves-light btn-large modal-trigger" href="#modal-product">Nuevo producto</a>
-    </div>
+    @if (user.role === 'manager') {
+        <div class="col s2">
+            <a class="waves-effect waves-light btn-large modal-trigger" href="#modal-product">Nuevo producto</a>
+        </div>
+    }
 </div>
 
 <table class="striped highlight">
@@ -18,7 +20,9 @@
             <th>Imagen</th>
             <th>Precio</th>
             <th>Stock</th>
-            <th>Acciones</th>
+            @if (user.role === 'manager') {
+                <th>Acciones</th>
+            }
         </tr>            
     </thead>
     <tbody>
@@ -30,7 +34,9 @@
                     <td><img class="responsive-img" width="80" [src]="product.image"></td>
                     <td>{{ product.price }}</td>
                     <td>{{ product.stock }}</td>
-                    <td><a class="waves-effect waves-teal btn modal-trigger" (click)="edit(product)" href="#modal-product">Editar</a></td>
+                    @if (user.role === 'manager') {
+                        <td><a class="waves-effect waves-teal btn modal-trigger" (click)="edit(product)" href="#modal-product">Editar</a></td>
+                    }
                 </tr>
             }
         }

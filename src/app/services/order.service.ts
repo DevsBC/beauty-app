@@ -36,8 +36,8 @@ export class OrderService {
 
   getCurrentOrders() {
     const path = this.db.getPath(this.collectionName);
-    return new Observable<any>(observer => {
-      return onSnapshot(query(collection(this.db.db, path), where('status', '==', 'Pendiente'), orderBy('creationDate', 'asc')),
+    return new Observable<any>(observer => {          
+      return onSnapshot(query(collection(this.db.db, path), where('status',  'in', ['Pendiente', 'Confirmada']), orderBy('creationDate', 'asc')),
         (snapshot => {
           const data: any[] = [];
           snapshot.docs.forEach(d => data.push(d.data()));
@@ -55,5 +55,25 @@ export class OrderService {
 
   updateStatus(orderId: string, data: any) {
     return this.db.updateDocument(this.collectionName, orderId, data);
+  }
+
+  async getAnalytics() {
+    const orders: Order[] = await this.db.getCollection(this.collectionName, { property: 'status', condition: '==', value: 'Completada' });
+    const count: any = { employees: {}, totals: {}, products: {} };
+    const sum = (value: any) => (value || 0) + 1;
+    const max = (obj: any, prop: string) => Object.keys(obj[prop]).reduce((a, b) => obj[prop][a] > obj[prop][b] ? a : b, '');
+    let total = 0;
+    for (const order of orders) {
+      count.employees[order.attendedBy!] = sum(count.employees[order.attendedBy!]);
+      count.totals[order.id!] = order.total;
+      total += order.total;
+      count.products[order.id!] = order.itemsQuantity;
+    }
+
+    count.topSale = count.totals[max(count, 'totals')];
+    count.topProducts = count.products[max(count, 'products')];
+    count.topEmployee = max(count, 'employees');
+    count.average = Math.round(total / orders.length);
+    return count;
   }
 }

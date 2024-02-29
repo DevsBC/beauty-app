@@ -11,7 +11,9 @@
                 <li routerLinkActive="active"><a routerLink="/appointments">Citas</a></li>
                 <li routerLinkActive="active"><a routerLink="/orders">Ordenes</a></li>
                 <li routerLinkActive="active"><a routerLink="/products">Productos</a></li>
-                <li routerLinkActive="active"><a routerLink="/users">Usuarios</a></li>
+                @if (user.role === 'manager') {
+                    <li routerLinkActive="active"><a routerLink="/users">Usuarios</a></li>
+                }
             </ul>
         </div>
     </nav>

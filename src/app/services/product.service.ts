@@ -47,6 +47,10 @@ export class ProductService {
     return product;
   }
 
+  updateProduct(id: string, data: any) {
+    return this.db.updateDocument(this.collection, id, data);
+  }
+
   deleteProduct(product: Product) {
     return this.db.deleteDocument(this.collection, product);
   }

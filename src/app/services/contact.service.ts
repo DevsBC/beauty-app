@@ -13,4 +13,12 @@ export class ContactService {
   setMessage(message: Message) {
     return this.db.setDocument(this.collectionName, message);
   }
+
+  getMessages() {
+    return this.db.getCollection(this.collectionName, { property: 'seen', condition: '==', value: false });
+  }
+
+  updateMessage(id: string, data: any) {
+    return this.db.updateDocument(this.collectionName, id, data);
+  }
 }
